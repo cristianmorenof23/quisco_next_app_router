@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categorias {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  slug      String
+  productos Producto[]
+}
+
+model Producto {
+  id          Int        @id @default(autoincrement())
+  nombre      String
+  precio      Float
+  image       String
+  categoriaId Int
+  categoria   Categorias @relation(fields: [categoriaId], references: [id])
+  ordenItems OrdenProductos[]
+}
+
+model Orden {
+  id           Int       @id @default(autoincrement())
+  nombre       String
+  total        Float
+  fecha        DateTime  @default(now())
+  estado       Boolean   @default(false)
+  ordenReadyAt DateTime?
+  ordenProductos OrdenProductos[]
+}
+
+// Tabla pivote
+model OrdenProductos {
+  id Int @id @default(autoincrement())
+  ordenId Int
+  orden Orden @relation(fields: [ordenId], references: [id])
+
+  productoId Int
+  producto Producto @relation(fields: [productoId], references: [id])
+  cantidad Int
+}
+
+
