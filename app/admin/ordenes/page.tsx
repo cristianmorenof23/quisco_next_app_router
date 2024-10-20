@@ -12,7 +12,7 @@ export default function OrdenesPage() {
     fetch(url)
       .then((res) => res.json())
       .then((data) => data);
-  const { data, error, isLoading } = useSWR<OrdenWithProductos[]>(
+  const { data, isLoading } = useSWR<OrdenWithProductos[]>(
     url,
     fetcher,
     {
